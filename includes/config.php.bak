@@ -1,0 +1,49 @@
+<?php
+
+
+date_default_timezone_set('Asia/Ho_Chi_Minh');
+
+
+$load_class = glob(__DIR__.'/class/class.*.php', GLOB_BRACE);
+
+if($load_class){
+	foreach ($load_class as $class) {
+		include $class;
+	}
+}
+
+$_url = 'http://localhost/yehtech.com/'; // địa chỉ trang
+
+
+
+
+$database_config = array('host' => 'localhost',
+						 'port' => '3306',
+						 'name' => '', //database name
+						 'user' => '', // user database
+						 'pass' => ''); // pass database
+
+
+$notifi_config = array('user' => 'vuhai6889@gmail.com', // tài khoản gmail
+						'pass' => '******'); // pass gmail
+
+$_db = new DB_mysqli($database_config);
+
+$_notifi = new Notifi($notifi_config);
+
+function escape_string($text){
+	global $_db;
+    return $_db->real_escape_string($text);
+}
+
+$_mod    = isset($_GET['mod']) ? $_GET['mod'] : '';
+$_id     = isset($_GET['id']) ? intval($_GET['id']) : '';
+$_act    = isset($_GET['act']) ? $_GET['act'] : '';
+$_type   = isset($_GET['type']) ? $_GET['type'] : '';
+$_route  = isset($_GET['route']) ? $_GET['route'] : 'statistics';
+
+$_max = 20;
+$_page = isset($_GET['page']) && $_GET['page'] >0?intval($_GET['page']):1;
+$_start = isset($_GET['page']) ? $_page * $_max - $_max : (isset($_GET['start']) ? abs(intval($_GET['start'])) : 0);
+
+?>
